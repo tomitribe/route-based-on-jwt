@@ -134,7 +134,7 @@ RewriteRule "^/?cinema/language$" "http://host.docker.internal:4444/movie-api/ap
 ADD COMMANDS
 
 == Testing the route
-On Test Windows, let's see what is the result from the request. We created a route which redirect the request based on the group. So, if an user from ENGLISH group call to the route, it should return english phrase. In case for an user from SPANISH group we expect receive a spanish phrase.
+We created a route which redirect the request based on the group. So, if an user from ENGLISH group call to the route, it should return english phrase. In case for an user from SPANISH group we expect receive a spanish phrase. To test it, we will use the test windows from the route page.
 
 For Alice we should fill the test with with follow values:
 
