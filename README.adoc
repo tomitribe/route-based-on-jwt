@@ -1,0 +1,139 @@
+:encoding: UTF-8
+:linkattrs:
+:sectlink:
+:sectanchors:
+:sectid:
+:imagesdir: media
+:leveloffset: 1
+
+= Route Based on JWT
+Time: 5 minutes
+
+== Learning objectives
+
+* Setup a TAG account with groups
+* Setup a route with condition based on JWT's property
+
+== Prerequisites
+
+* Docker installed and running.
+* Curl installed.
+* Previous basic knowledge about TAG Routes, OAuth 2 and JWT.
+
+
+== Architectural Diagram
+During this guide we are going to lear how to dynamically redirect a request based on group information inside the JWT. In the diagram the main actors are:
+
+ADD IMAGE
+
+
+* One TAG account for the client id
+* Two TAG account for differents groups
+* Two deployments of the movie microservice we have been using in previous guides.
+
+
+== Run Docker Containers
+
+Before digging into OAuth2 using TAG you need run the docker containers of the Movies Microservice and TAG.
+
+=== Run the demo Microservice
+
+
+For this guide we are going to scale the movie microservice up to three instances with a custom language configuration: English, Spanish and French. 
+
+For each microservice instance we are going to use the following names and exposed ports:
+
+* movie-api-en (port 3333)
+* movie-api-es (port 4444)
+
+In order to run the three microservice instances we need to open a terminal and execute the following command:
+```
+docker run -e LANG=ENGLISH -d -p 3333:9090 --name movie-api-en  tomitribedev/movie-api
+docker run -e LANG=SPANISH -d -p 4444:9090 --name movie-api-es  tomitribedev/movie-api
+```
+
+Using curl, we can validate that our microservices are up and running by executing the following commands.
+Notice that each  microservice returns in the payload it’s own Language Configuration.
+
+```
+curl  http://localhost:3333/movie-api/api/language
+"ENGLISH"
+curl  http://localhost:4444/movie-api/api/language
+"SPANISH"
+```
+
+
+=== Run Tribestream API Gateway (TAG)
+Open a terminal and execute the following command according to your operating system:
+
+* For linux: +
+	`docker run -it --net="host" -de LICENSE=accept --name tag-dynamic-lb tomitribe/tribestream-api-gateway tomitribe/tribestream-api-gateway`
+
+* For OS X and Windows: +
+     `docker run -it -e LICENSE=accept --name tag-dynamic-lb -p 8080:8080  tomitribe/tribestream-api-gateway`
+
+
+TAG is ready when you see the following message on the TAG log:
+
+```
+INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-bio-8080"]
+INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["ajp-bio-8009"]
+INFO [main] org.apache.catalina.startup.Catalina.start Server startup in 18348 ms
+```
+
+To detach the container log output,  type on the terminal: `ctrl+p` followed by `ctrl+q` 
+
+you can now open a browser and navigate to: `http://localhost:8080/tag`
+
+Login into the TAG dashboard using the following credentials: username: `admin`, password: `admin`.
+If this is not the first time you are login into TAG, you may be redirected straight to the `Dashboard` page.
+
+
+=== Import TAG entities
+In order to focus the content of this guide to the learning objectives described at the beginning of the guide, we are providing the following commands to import into TAG the necessary entities who's configuration instructions are already covered in previous guides from the Learning Journey:
+
+* The accounts
+** Username: `alice`
+** Email: `alice@email.com`
+** Full Name: `Alice`
+** Password: 
+
+** Username: `bob`
+** Email: `bob@email.com`
+** Full Name: `Bob`
+** Password:
+
+* The client account
+** Username: movieapp
+** Email: `movieapp@email.com`
+** Full Name: `Movie APP Client`
+** Client Secret: tomitribe
+
+* A Route
+** Name: `movie`
+** Mod_Rewrite: 
+```
+RewriteCond "%{JWT:groups}" ".*english.*" [NC]
+RewriteRule "^/?cinema/language$" "http://localhost:3333/movie-api/api/language" [P,NE,auth]
+
+RewriteCond "%{JWT:groups}" ".*spanish.*" [NC]
+RewriteRule "^/?cinema/language$" "http://localhost:4444/movie-api/api/language" [P,NE,auth]
+```
+
+ADD COMMANDS
+
+
+=== Stop Tribestream API Gateway
+Since both the TAG and the microservices were created with a specific container name, you can now stop the
+containers from the command line with the following command.
+
+Stopping TAG
+```
+docker stop tag-dynamic-lb
+```
+
+Stopping the microservices
+```
+docker stop movie-api-en
+docker stop movie-api-es
+```

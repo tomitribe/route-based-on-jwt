@@ -1,0 +1,9 @@
+%YAML 1.2
+---
+documentation:
+
+  - doc_root: 'README.adoc'
+    name: 'Examples'
+    display_name: 'Route Based on JWT'
+    public_path: 'en/api-gateway/route-based-on-jwt'
+    single_page: 'true'
