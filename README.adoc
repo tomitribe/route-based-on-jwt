@@ -33,7 +33,7 @@ ADD IMAGE
 
 == Run Docker Containers
 
-Before digging into OAuth2 using TAG you need run the docker containers of the Movies Microservice and TAG.
+Before digging the routes using TAG you need run the docker containers of the Movies Microservice and TAG.
 
 === Run the demo Microservice
 
