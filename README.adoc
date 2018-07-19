@@ -26,7 +26,6 @@ During this guide we are going to lear how to dynamically redirect a request bas
 
 ADD IMAGE
 
-
 * One TAG account for the client id
 * Two TAG account for differents groups
 * Two deployments of the movie microservice we have been using in previous guides.
@@ -67,10 +66,10 @@ curl  http://localhost:4444/movie-api/api/language
 Open a terminal and execute the following command according to your operating system:
 
 * For linux: +
-	`docker run -it --net="host" -de LICENSE=accept --name tag-dynamic-lb tomitribe/tribestream-api-gateway tomitribe/tribestream-api-gateway`
+	`docker run -it --net="host" -de LICENSE=accept --name tag tomitribe/tribestream-api-gateway tomitribe/tribestream-api-gateway`
 
 * For OS X and Windows: +
-     `docker run -it -e LICENSE=accept --name tag-dynamic-lb -p 8080:8080  tomitribe/tribestream-api-gateway`
+     `docker run -it -e LICENSE=accept --name tag -p 8080:8080  tomitribe/tribestream-api-gateway`
 
 
 TAG is ready when you see the following message on the TAG log:
@@ -112,13 +111,22 @@ In order to focus the content of this guide to the learning objectives described
 
 * A Route
 ** Name: `movie`
-** Mod_Rewrite: 
+** Mod_Rewrite:
+*** For linux
 ```
 RewriteCond "%{JWT:groups}" ".*english.*" [NC]
 RewriteRule "^/?cinema/language$" "http://localhost:3333/movie-api/api/language" [P,NE,auth]
 
 RewriteCond "%{JWT:groups}" ".*spanish.*" [NC]
 RewriteRule "^/?cinema/language$" "http://localhost:4444/movie-api/api/language" [P,NE,auth]
+```
+*** For OS X and Windows
+```
+RewriteCond "%{JWT:groups}" ".*english.*" [NC]
+RewriteRule "^/?cinema/language$" "http://host.docker.internal:3333/movie-api/api/language" [P,NE,auth]
+
+RewriteCond "%{JWT:groups}" ".*spanish.*" [NC]
+RewriteRule "^/?cinema/language$" "http://host.docker.internal:4444/movie-api/api/language" [P,NE,auth]
 ```
 
 ADD COMMANDS
@@ -130,7 +138,7 @@ containers from the command line with the following command.
 
 Stopping TAG
 ```
-docker stop tag-dynamic-lb
+docker stop tag
 ```
 
 Stopping the microservices
