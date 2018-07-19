@@ -95,12 +95,14 @@ In order to focus the content of this guide to the learning objectives described
 ** Username: `alice`
 ** Email: `alice@email.com`
 ** Full Name: `Alice`
+** Group: `english`
 ** Password: tomitribe
 
 * The account
 ** Username: `bob`
 ** Email: `bob@email.com`
 ** Full Name: `Bob`
+** Group: `spanish`
 ** Password: tomitribe
 
 * The client account
@@ -131,6 +133,25 @@ RewriteRule "^/?cinema/language$" "http://host.docker.internal:4444/movie-api/ap
 
 ADD COMMANDS
 
+== Testing the route
+On Test Windows, let's see what is the result from the request. We created a route which redirect the request based on the group. So, if an user from ENGLISH group call to the route, it should return english phrase. In case for an user from SPANISH group we expect receive a spanish phrase.
+
+For Alice we should fill the test with with follow values:
+
+ADD IMAGE
+
+Alice is part of ENGLISH group, so we expecte to receive a english phrase like:
+
+ADD IMAGE
+
+
+For Bob we should fill the test with with follow values:
+
+ADD IMAGE
+
+Bob is part of SPANISH group, so we expecte to receive a spanish phrase like:
+
+ADD IMAGE
 
 === Stop Tribestream API Gateway
 Since both the TAG and the microservices were created with a specific container name, you can now stop the
