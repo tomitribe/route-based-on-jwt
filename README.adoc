@@ -92,16 +92,17 @@ If this is not the first time you are login into TAG, you may be redirected stra
 === Import TAG entities
 In order to focus the content of this guide to the learning objectives described at the beginning of the guide, we are providing the following commands to import into TAG the necessary entities who's configuration instructions are already covered in previous guides from the Learning Journey:
 
-* The accounts
+* The account
 ** Username: `alice`
 ** Email: `alice@email.com`
 ** Full Name: `Alice`
-** Password: 
+** Password: tomitribe
 
+* The account
 ** Username: `bob`
 ** Email: `bob@email.com`
 ** Full Name: `Bob`
-** Password:
+** Password: tomitribe
 
 * The client account
 ** Username: movieapp
