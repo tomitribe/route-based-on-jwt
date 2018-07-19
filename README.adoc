@@ -112,7 +112,7 @@ In order to focus the content of this guide to the learning objectives described
 * A Route
 ** Name: `movie`
 ** Mod_Rewrite:
-*** For linux
+* For linux
 ```
 RewriteCond "%{JWT:groups}" ".*english.*" [NC]
 RewriteRule "^/?cinema/language$" "http://localhost:3333/movie-api/api/language" [P,NE,auth]
@@ -120,7 +120,7 @@ RewriteRule "^/?cinema/language$" "http://localhost:3333/movie-api/api/language"
 RewriteCond "%{JWT:groups}" ".*spanish.*" [NC]
 RewriteRule "^/?cinema/language$" "http://localhost:4444/movie-api/api/language" [P,NE,auth]
 ```
-*** For OS X and Windows
+* For OS X and Windows
 ```
 RewriteCond "%{JWT:groups}" ".*english.*" [NC]
 RewriteRule "^/?cinema/language$" "http://host.docker.internal:3333/movie-api/api/language" [P,NE,auth]
